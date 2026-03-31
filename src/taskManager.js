@@ -3,6 +3,6 @@ export function validateTitle(title){
         return false;
     }
 
-    const trimmed = title.trim();
-    return trimmed.length >= 3;
+    const titleTrimmed = title.trim();
+    return titleTrimmed.length >= 3;
 }
