@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {validateTitle, createTask, resetId, addTask, toggleTask} from "../src/taskManager.js";
+import {validateTitle, createTask, resetId, addTask, toggleTask, removeTask} from "../src/taskManager.js";
 
 describe('validateTitle', () => {
     it("Deve retornar true para um título válido", () => {
@@ -160,5 +160,57 @@ describe('toggleTask', () => {
 
         expect(toggled).not.toBe(task);
     })
+    
+})
 
+describe('removeTask', () => {
+    beforeEach(() => {
+        resetId();
+    })
+
+    it('deve remover a tarefa pelo id', () => {
+        let tasks = addTask([], "Tarefa 01")
+        tasks = addTask(tasks, "Tarefa 02")
+        const taskToRemove = tasks[0];
+
+        const updatedTasks = removeTask(tasks, taskToRemove.id);
+
+        expect(updatedTasks).toHaveLength(1);
+        expect(updatedTasks[0].id).toBe(2);
+    })
+
+    it('deve manter as outras tarefas inalteradas', () => {
+        let tasks = addTask([], "Tarefa 01")
+        tasks = addTask(tasks, "Tarefa 02")
+        const taskToRemove = tasks[0];
+
+        const updatedTasks = removeTask(tasks, taskToRemove.id);
+
+        expect(updatedTasks[0].title).toBe("Tarefa 02");
+    })
+
+    it('deve retornar um NOVO array (imutabilidade)', () => {
+        let tasks = addTask([], "Tarefa 01")
+        const taskToRemove = tasks[0];
+
+        const updatedTasks = removeTask(tasks, taskToRemove.id);
+
+        expect(updatedTasks).not.toBe(tasks);
+    })
+
+    it('id inexistente deve retornar o array original sem alterações', () => {
+        let tasks = addTask([], "Tarefa 01")
+        tasks = addTask(tasks, "Tarefa 02")
+
+        const updatedTasks = removeTask(tasks, "Tarefa inexistente");
+
+        expect(updatedTasks).toEqual(tasks);
+    })
+
+    it('lista vazia retorna array vazio', () => {
+        const updatedTasks = removeTask([], 1);
+
+        expect(updatedTasks).toEqual([]);
+    })
+    
 })
