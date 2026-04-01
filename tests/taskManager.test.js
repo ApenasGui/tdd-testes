@@ -229,13 +229,14 @@ describe('filterTasks', () => {
     })
 
     it('deve retornar só as tarefas completadas', () => {
+
         let task1 = createTask('Tarefa 01');
         let task2 = createTask('Tarefa 02');
         let task3 = createTask('Tarefa 03');
         let task4 = createTask('Tarefa 04');
 
-        task2.completed = true;
-        task4.completed = true;
+        task2.completed = toggleTask(task2).completed;
+        task4.completed = toggleTask(task4).completed;
 
         let listaTask = [task1, task2, task3, task4];
         let listaCompletas = [];
@@ -248,7 +249,7 @@ describe('filterTasks', () => {
             }
         };
 
-        expect(listaCompletas.length).toHaveLength(2);
+        expect(listaCompletas.length).toBe(2);
     });
 
     it('deve retornar todas as tarefas', () => {
@@ -257,15 +258,17 @@ describe('filterTasks', () => {
         let task3 = createTask('Tarefa 03');
         let task4 = createTask('Tarefa 04');
 
-        let listaTodasTarefas = [task1, task2, task3, task4];
-        let listaTasks = [];
+        task3.completed = toggleTask(task3).completed;
 
-        for(let i = 0; i < listaTask.length; i++){
-            let taskAtual = listaTask[i];
-            listaTasks.push(taskAtual)
+        let listaTasks = [task1, task2, task3, task4];
+        let listaTodas = [];
+
+        for(let i = 0; i < listaTasks.length; i++){
+            let taskAtual = listaTasks[i];
+            listaTodas.push(taskAtual)
         };
 
-        expect(listaTasks.length).toHaveLength(listaTodasTarefas.length);
+        expect(listaTodas.length).toBe(4);
     })
 
     it('deve retornar todas as tarefas pendendtes', () => {
@@ -274,7 +277,7 @@ describe('filterTasks', () => {
         let task3 = createTask('Tarefa 03');
         let task4 = createTask('Tarefa 04');
 
-        task2.completed = true;
+        task2.completed = toggleTask(task2).completed;
 
         let listaTasks = [task1, task2, task3, task4];
         let listaTarefasPendentes = [];
@@ -287,7 +290,7 @@ describe('filterTasks', () => {
             }
         };
 
-        expect(listaTarefasPendentes.length).toHaveLength(3);
+        expect(listaTarefasPendentes.length).toBe(3);
     })
 
     it('deve retornar vazio se lista estiver vazia', () => {
