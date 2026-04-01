@@ -1,5 +1,5 @@
-import { describe, it, expect } from "vitest";
-import {validateTitle} from "../src/taskManager.js";
+import { describe, it, expect, beforeEach } from "vitest";
+import {validateTitle, createTask, resetId} from "../src/taskManager.js";
 
 describe('validateTitle', () => {
     it("Deve retornar true para um título válido", () => {
@@ -43,3 +43,23 @@ describe('validateTitle', () => {
     });
 });
 
+describe('createTask', () => {
+    beforeEach(() => {
+        resetId()
+    })
+
+    it("Deve criar criar uma task com as propriedades corretas", () => {
+        const task = createTask('Estudar TDD');
+
+        expect(task).toHaveProperty('id');
+        expect(task).toHaveProperty('title', 'Estudar TDD');
+        expect(task).toHaveProperty('completed', false);
+    })
+
+    it('Deve atribuir ID incrementais', () => {
+        const task01 = createTask('Tarefa 01');
+        const task02 = createTask('Tarefa 02');
+
+        expect(task02.id).toBe(task01.id + 1);
+    })
+});
