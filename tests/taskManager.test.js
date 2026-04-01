@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {validateTitle, createTask, resetId} from "../src/taskManager.js";
+import {validateTitle, createTask, resetId, addTask} from "../src/taskManager.js";
 
 describe('validateTitle', () => {
     it("Deve retornar true para um título válido", () => {
@@ -76,3 +76,24 @@ describe('createTask', () => {
     })
 
 });
+
+describe('addTask', () => {
+    beforeEach(() => {
+        resetId();
+    })
+
+    it('deve adicionar uma tarefa a uma lista vazia', () => {
+        const task = addTask([], 'Primeira tarefa');
+
+        expect(task).toHaveLength(1);
+        expect(task[0].title).toBe('Primeira tarefa');
+    })
+
+    it('deve adicionar uma tarefa a uma lista existente', () => {
+        let tasks = addTask([], 'Tarefa 01');
+        tasks = addTask(tasks, 'Tarefa 02');
+
+        expect(tasks).toHaveLength(2);
+        expect(tasks[1].title).toBe('Tarefa 02');
+    })
+})
