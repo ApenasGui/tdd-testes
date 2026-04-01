@@ -62,4 +62,17 @@ describe('createTask', () => {
 
         expect(task02.id).toBe(task01.id + 1);
     })
+
+    it('Deve iniciar com completed false', () => {
+        const task = createTask('Tarefa Teste');
+
+        expect(task.completed).toBe(false);
+    })
+
+    it('deve fazer um trim no título', () => {
+        const task = createTask('Titulo trim test  ');
+
+        expect(task.title).toBe('Titulo trim test');
+    })
+
 });
