@@ -40,3 +40,17 @@ export function toggleTask(task){
 export function removeTask(tasks, id){
     return tasks.filter(task => task.id !== id);
 }
+
+export function filterTasks(tasks, statusTask){
+    if(statusTask === 'completed'){
+        return tasks.filter(task => task.completed);
+    }
+
+    if(statusTask === 'pending'){
+        return tasks.filter(task => !task.completed);
+    }
+
+    if(statusTask === 'default'){
+        return tasks;
+    }
+}
