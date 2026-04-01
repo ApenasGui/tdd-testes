@@ -202,7 +202,7 @@ describe('removeTask', () => {
         let tasks = addTask([], "Tarefa 01")
         tasks = addTask(tasks, "Tarefa 02")
 
-        const updatedTasks = removeTask(tasks, "Tarefa inexistente");
+        const updatedTasks = removeTask(tasks, 67);
 
         expect(updatedTasks).toEqual(tasks);
     })
@@ -212,5 +212,5 @@ describe('removeTask', () => {
 
         expect(updatedTasks).toEqual([]);
     })
-    
+
 })
