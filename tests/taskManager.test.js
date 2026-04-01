@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {validateTitle, createTask, resetId, addTask} from "../src/taskManager.js";
+import {validateTitle, createTask, resetId, addTask, toggleTask} from "../src/taskManager.js";
 
 describe('validateTitle', () => {
     it("Deve retornar true para um título válido", () => {
@@ -124,4 +124,41 @@ describe('addTask', () => {
     it('deve lançar erro para título numérico', () => {
         expect(() => addTask([], 42)).toThrow('Título inválido');
     });
+})
+
+describe('toggleTask', () => {
+    beforeEach(() => {
+        resetId();
+    })
+
+    it('deve alternar o status de completed de false para true', () => {
+        const task = createTask('Tarefa teste');
+        const toggled = toggleTask(task);
+
+        expect(toggled.completed).toBe(true);
+    })
+    
+    it('deve alternar o status de completed de true para false', () => {
+        let task = createTask('Tarefa teste');
+        task.completed = true;
+        const toggled = toggleTask(task);
+
+        expect(toggled.completed).toBe(false);
+    })
+
+    it('deve manter o id e o title inalterados', () => {
+        const task = createTask('Tarefa teste');
+        const toggled = toggleTask(task);
+
+        expect(toggled.id).toBe(task.id);
+        expect(toggled.title).toBe(task.title);
+    })
+
+    it('deve retornar um NOVO objeto (imutabilidade)', () => {
+        const task = createTask('Tarefa teste');
+        const toggled = toggleTask(task);
+
+        expect(toggled).not.toBe(task);
+    })
+
 })
