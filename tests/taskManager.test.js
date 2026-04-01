@@ -96,4 +96,32 @@ describe('addTask', () => {
         expect(tasks).toHaveLength(2);
         expect(tasks[1].title).toBe('Tarefa 02');
     })
+
+    it('deve retornar um NOVO array (imutabilidade)', () => {
+    const original = [];
+    const updated = addTask(original, 'Nova tarefa');
+
+    expect(updated).not.toBe(original);
+    expect(original).toHaveLength(0);
+    });
+
+    it('deve lançar erro para título vazio', () => {
+        expect(() => addTask([], '')).toThrow('Título inválido');
+    });
+
+    it('deve lançar erro para título null', () => {
+        expect(() => addTask([], null)).toThrow('Título inválido');
+    });
+
+    it('deve lançar erro para título undefined', () => {
+        expect(() => addTask([], undefined)).toThrow('Título inválido');
+    });
+
+    it('deve lançar erro para título com menos de 3 caracteres', () => {
+        expect(() => addTask([], 'ab')).toThrow('Título inválido');
+    });
+
+    it('deve lançar erro para título numérico', () => {
+        expect(() => addTask([], 42)).toThrow('Título inválido');
+    });
 })
