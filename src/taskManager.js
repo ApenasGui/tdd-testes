@@ -36,3 +36,7 @@ export function toggleTask(task){
         completed: !task.completed,
     }
 }
+
+export function removeTask(tasks, id){
+    return tasks.filter(task => task.id !== id);
+}
