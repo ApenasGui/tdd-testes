@@ -1,5 +1,13 @@
 import { describe, it, expect, beforeEach } from "vitest";
-import {validateTitle, createTask, resetId, addTask, toggleTask, removeTask} from "../src/taskManager.js";
+import {
+    validateTitle, 
+    createTask, 
+    resetId, 
+    addTask, 
+    toggleTask, 
+    removeTask,
+    filterTasks,
+} from "../src/taskManager.js";
 
 describe('validateTitle', () => {
     it("Deve retornar true para um título válido", () => {
@@ -213,4 +221,88 @@ describe('removeTask', () => {
         expect(updatedTasks).toEqual([]);
     })
 
+})
+
+describe('filterTasks', () => {
+    beforeEach(() => {
+        resetId();
+    })
+
+    it('deve retornar só as tarefas completadas', () => {
+        let task1 = createTask('Tarefa 01');
+        let task2 = createTask('Tarefa 02');
+        let task3 = createTask('Tarefa 03');
+        let task4 = createTask('Tarefa 04');
+
+        task2.completed = true;
+        task4.completed = true;
+
+        let listaTask = [task1, task2, task3, task4];
+        let listaCompletas = [];
+
+        for(let i = 0; i < listaTask.length; i++){
+            let taskAtual = listaTask[i];
+
+            if(taskAtual.completed == true){
+                listaCompletas.push(taskAtual)
+            }
+        };
+
+        expect(listaCompletas.length).toHaveLength(2);
+    });
+
+    it('deve retornar todas as tarefas', () => {
+        let task1 = createTask('Tarefa 01');
+        let task2 = createTask('Tarefa 02');
+        let task3 = createTask('Tarefa 03');
+        let task4 = createTask('Tarefa 04');
+
+        let listaTodasTarefas = [task1, task2, task3, task4];
+        let listaTasks = [];
+
+        for(let i = 0; i < listaTask.length; i++){
+            let taskAtual = listaTask[i];
+            listaTasks.push(taskAtual)
+        };
+
+        expect(listaTasks.length).toHaveLength(listaTodasTarefas.length);
+    })
+
+    it('deve retornar todas as tarefas pendendtes', () => {
+        let task1 = createTask('Tarefa 01');
+        let task2 = createTask('Tarefa 02');
+        let task3 = createTask('Tarefa 03');
+        let task4 = createTask('Tarefa 04');
+
+        task2.completed = true;
+
+        let listaTasks = [task1, task2, task3, task4];
+        let listaTarefasPendentes = [];
+
+        for(let i = 0; i < listaTasks.length; i++){
+            let taskAtual = listaTasks[i];
+
+            if(taskAtual.completed == false){
+                listaTarefasPendentes.push(taskAtual)
+            }
+        };
+
+        expect(listaTarefasPendentes.length).toHaveLength(3);
+    })
+
+    it('deve retornar vazio se lista estiver vazia', () => {
+        let listaTasks = [];
+
+        expect(listaTasks).toHaveLength([]);
+    });
+
+    it('deve retornar um novo array (imutabilidade)', () => {
+        let listaTaskOriginal = [createTask('Tarefa 01'), createTask('Tarefa 02')];
+        listaTaskOriginal[0].completed = true;
+        listaTaskOriginal[1].completed = false;
+
+        let listaNova = listaTaskOriginal;
+
+        expect(listaNova).toBe(listaTaskOriginal);
+    })
 })
