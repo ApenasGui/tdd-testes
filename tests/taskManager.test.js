@@ -8,6 +8,7 @@ import {
     removeTask,
     filterTasks,
     countTasks,
+    countCompletedTasks
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {

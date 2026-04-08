@@ -59,5 +59,7 @@ export function countTasks(tasks = []){
     return tasks.length;
 }
 
-
+export function countCompletedTasks(tasks = []){
+    return tasks.filter(task => task.completed).length;
+}
 
