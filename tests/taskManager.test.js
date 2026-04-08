@@ -354,4 +354,29 @@ describe('filterTasks', () => {
             expect(countCompletedTasks(tasks)).toBe(2);
     });
 
+
+    describe('countPendingTasks', () => {
+        beforeEach(() => {
+            resetId(),
+            tasks = addTask([], 'Tarefa 01');
+            tasks = addTask(tasks, 'Tarefa 02');
+            tasks = addTask(tasks, 'Tarefa 03');
+
+            tasks = task.map(task => (task.id === 1 ? toggleTask(task) : task));
+        })
+
+        it('deve retornar 0 se não houver tarefas pendentes', () => {
+            const allCompletedTasks = tasks.map(task => toggleTask(task));
+
+            expect(countPendingTasks(allCompletedTasks)).toBe(0);
+        });
+
+        it('deve retornar o número de tarefas pendentes', () => {
+            expect(countPendingTasks(tasks)).toBe(2);
+        });
+
+        it('deve retornar 0 se a lsita estiver vazia', () => {
+            expect(countPendingTasks([])).toBe(0);
+        });
+    });
 });
