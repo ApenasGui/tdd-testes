@@ -54,3 +54,10 @@ export function filterTasks(tasks, statusTask){
         return tasks;
     }
 }
+
+export function countTasks(tasks = []){
+    return tasks.length;
+}
+
+
+

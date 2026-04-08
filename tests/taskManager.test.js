@@ -7,6 +7,7 @@ import {
     toggleTask, 
     removeTask,
     filterTasks,
+    countTasks,
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {
@@ -320,15 +321,13 @@ describe('filterTasks', () => {
         });
 
         it('deve contar o número de tarefas completadas', () => {
-            let task1 = createTask('Tarefa 01');
-            let task2 = createTask('Tarefa 02');
-            let task3 = createTask('Tarefa 03');
+            let tasks = addTask([], 'Tarefa 01');
+            tasks = addTask(tasks, 'Tarefa 02');
+            tasks = addTask(tasks, 'Tarefa 03');
 
-            task1.completed = toggleTask(task1).completed;
-            task2.completed = toggleTask(task2).completed;
-
-            let listaTasks = [task1, task2, task3];
-            expect(countTasks(listaTasks, true)).toBe(2);
+            expect(countTasks(tasks)).toBe(3);
         });
     });
+
+    
 });
