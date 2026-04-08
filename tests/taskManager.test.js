@@ -9,7 +9,8 @@ import {
     filterTasks,
     countTasks,
     countCompletedTasks,
-    countPendingTasks
+    countPendingTasks,
+    validatePriority,
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {
@@ -378,5 +379,31 @@ describe('filterTasks', () => {
         it('deve retornar 0 se a lista estiver vazia', () => {
             expect(countPendingTasks([])).toBe(0);
         });
+    });
+
+    describe('validatePriority', () => {
+        let validPriorities = [];
+        beforeEach(() => {
+            resetId();
+            validPriorities = ['low', 'medium', 'high'];
+        })
+
+        it('deve retornar true para prioridade válida', () => {
+            validPriorities.forEach(priority => {
+                expect(validatePriority(priority)).toBe(true);
+            });
+        });
+
+        it('deve retornar false se não for nenhuma das opções válidas', () => {
+            const invalidValues = ['urgent', 'critical', '', null, undefined, 123, true, [], {}];
+
+            invalidValues.forEach(value => {
+                if(invalidValues != validPriorities){
+                    expect(validatePriority(value)).toBe(false);
+                }
+            });
+        });
+
+
     });
 });
