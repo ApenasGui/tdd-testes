@@ -309,6 +309,7 @@ describe('filterTasks', () => {
 
         expect(listaNova).toBe(listaTaskOriginal);
     })
+});
 
     describe('countTasks', () => {
         beforeEach(() => {
@@ -329,5 +330,27 @@ describe('filterTasks', () => {
         });
     });
 
-    
+    describe('countCompletedTasks', () => {
+        beforeEach(() => {
+            resetId();
+        })
+
+        it('deve retornar 0 se não houver tarefas completadas', () => {
+            let tasks = addTask([], 'Tarefa 01');
+            tasks = addTask(tasks, 'Tarefa 02');
+            tasks = addTask(tasks, 'Tarefa 03');
+            expect(countCompletedTasks(tasks)).toBe(0);
+        });
+
+        it('deve retornar o número de tarefas completadas', () => {
+            let tasks = addTask([], 'Tarefa 01');
+            tasks = addTask(tasks, 'Tarefa 02');
+            tasks = addTask(tasks, 'Tarefa 03');
+
+            tasks[0].completed = toggleTask(tasks[0]).completed;
+            tasks[2].completed = toggleTask(tasks[2]).completed;
+
+            expect(countCompletedTasks(tasks)).toBe(2);
+    });
+
 });
