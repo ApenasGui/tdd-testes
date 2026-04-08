@@ -60,6 +60,10 @@ export function countTasks(tasks = []){
 }
 
 export function countCompletedTasks(tasks = []){
-    return tasks.filter(task => task.completed).length;
+    return tasks.filter(task => task.completed === true).length;
+}
+
+export function countPendingTasks(tasks = []){
+    return tasks.filter(task => task.completed === false).length;
 }
 

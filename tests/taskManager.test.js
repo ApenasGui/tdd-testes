@@ -8,7 +8,8 @@ import {
     removeTask,
     filterTasks,
     countTasks,
-    countCompletedTasks
+    countCompletedTasks,
+    countPendingTasks
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {
@@ -356,17 +357,18 @@ describe('filterTasks', () => {
 
 
     describe('countPendingTasks', () => {
+        let tasks = [];
         beforeEach(() => {
-            resetId(),
+            resetId();
             tasks = addTask([], 'Tarefa 01');
             tasks = addTask(tasks, 'Tarefa 02');
             tasks = addTask(tasks, 'Tarefa 03');
 
-            tasks = task.map(task => (task.id === 1 ? toggleTask(task) : task));
+            tasks = tasks.map(task => (task.id === 1 ? toggleTask(task) : task));
         })
 
         it('deve retornar 0 se não houver tarefas pendentes', () => {
-            const allCompletedTasks = tasks.map(task => toggleTask(task));
+            const allCompletedTasks = tasks.map((task) => ({ ...task, completed: true }));
 
             expect(countPendingTasks(allCompletedTasks)).toBe(0);
         });
@@ -375,7 +377,7 @@ describe('filterTasks', () => {
             expect(countPendingTasks(tasks)).toBe(2);
         });
 
-        it('deve retornar 0 se a lsita estiver vazia', () => {
+        it('deve retornar 0 se a lista estiver vazia', () => {
             expect(countPendingTasks([])).toBe(0);
         });
     });
