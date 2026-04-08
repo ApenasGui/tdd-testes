@@ -383,15 +383,19 @@ describe('filterTasks', () => {
 
     describe('validatePriority', () => {
         let validPriorities = [];
+        let task;
         beforeEach(() => {
             resetId();
             validPriorities = ['low', 'medium', 'high'];
+            task = (createTask('Tarefa 1', 'medium'));
         })
 
         it('deve retornar true para prioridade válida', () => {
-            validPriorities.forEach(priority => {
-                expect(validatePriority(priority)).toBe(true);
-            });
+            let prioritiesTests = ['low', 'low', 'high', 'medium', 'low', 'medium']
+
+            for(let i = 0; i < prioritiesTests.length; i++){
+                expect(validatePriority(prioritiesTests[i])).toBe(true);
+            }
         });
 
         it('deve retornar false se não for nenhuma das opções válidas', () => {

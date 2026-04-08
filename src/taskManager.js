@@ -13,11 +13,13 @@ export function validateTitle(title){
     return titleTrimmed.length >= 3;
 }
 
-export function createTask(title){
+export function createTask(title, priority){
+    if(validatePriority(priority)){}
     return {
         id: _nextId++,
         title: title.trim(),
         completed: false,
+        priority: priority
     };
 }
 
@@ -67,3 +69,17 @@ export function countPendingTasks(tasks = []){
     return tasks.filter(task => task.completed === false).length;
 }
 
+export function validatePriority(priority){
+    if(priority === 'low'){
+        return true;
+    }
+    if(priority === 'high'){
+        return true;
+    }
+    if(priority === 'medium'){
+        return true;
+    }
+    else {
+        return false;
+    }
+}
