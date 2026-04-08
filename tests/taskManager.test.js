@@ -57,32 +57,33 @@ describe('validateTitle', () => {
 
 describe('createTask', () => {
     beforeEach(() => {
-        resetId()
+        resetId();
     })
 
     it("Deve criar criar uma task com as propriedades corretas", () => {
-        const task = createTask('Estudar TDD');
+        const task = createTask('Estudar TDD', 'medium');
 
         expect(task).toHaveProperty('id');
         expect(task).toHaveProperty('title', 'Estudar TDD');
         expect(task).toHaveProperty('completed', false);
+        expect(task).toHaveProperty('priority');
     })
 
     it('Deve atribuir ID incrementais', () => {
-        const task01 = createTask('Tarefa 01');
-        const task02 = createTask('Tarefa 02');
+        const task01 = createTask('Tarefa 01', 'low');
+        const task02 = createTask('Tarefa 02', 'low');
 
         expect(task02.id).toBe(task01.id + 1);
     })
 
     it('Deve iniciar com completed false', () => {
-        const task = createTask('Tarefa Teste');
+        const task = createTask('Tarefa Teste', 'low');
 
         expect(task.completed).toBe(false);
     })
 
     it('deve fazer um trim no título', () => {
-        const task = createTask('Titulo trim test  ');
+        const task = createTask('Titulo trim test  ', 'low');
 
         expect(task.title).toBe('Titulo trim test');
     })
@@ -95,15 +96,15 @@ describe('addTask', () => {
     })
 
     it('deve adicionar uma tarefa a uma lista vazia', () => {
-        const task = addTask([], 'Primeira tarefa');
+        const task = addTask([], 'Primeira tarefa', 'low');
 
         expect(task).toHaveLength(1);
         expect(task[0].title).toBe('Primeira tarefa');
     })
 
     it('deve adicionar uma tarefa a uma lista existente', () => {
-        let tasks = addTask([], 'Tarefa 01');
-        tasks = addTask(tasks, 'Tarefa 02');
+        let tasks = addTask([], 'Tarefa 01', 'low');
+        tasks = addTask(tasks, 'Tarefa 02', 'low');
 
         expect(tasks).toHaveLength(2);
         expect(tasks[1].title).toBe('Tarefa 02');
@@ -111,30 +112,30 @@ describe('addTask', () => {
 
     it('deve retornar um NOVO array (imutabilidade)', () => {
     const original = [];
-    const updated = addTask(original, 'Nova tarefa');
+    const updated = addTask(original, 'Nova tarefa', 'low');
 
     expect(updated).not.toBe(original);
     expect(original).toHaveLength(0);
     });
 
     it('deve lançar erro para título vazio', () => {
-        expect(() => addTask([], '')).toThrow('Título inválido');
+        expect(() => addTask([], '', '')).toThrow('Título inválido');
     });
 
     it('deve lançar erro para título null', () => {
-        expect(() => addTask([], null)).toThrow('Título inválido');
+        expect(() => addTask([], null, '')).toThrow('Título inválido');
     });
 
     it('deve lançar erro para título undefined', () => {
-        expect(() => addTask([], undefined)).toThrow('Título inválido');
+        expect(() => addTask([], undefined, '')).toThrow('Título inválido');
     });
 
     it('deve lançar erro para título com menos de 3 caracteres', () => {
-        expect(() => addTask([], 'ab')).toThrow('Título inválido');
+        expect(() => addTask([], 'ab', '')).toThrow('Título inválido');
     });
 
     it('deve lançar erro para título numérico', () => {
-        expect(() => addTask([], 42)).toThrow('Título inválido');
+        expect(() => addTask([], 42, '')).toThrow('Título inválido');
     });
 })
 
@@ -144,14 +145,14 @@ describe('toggleTask', () => {
     })
 
     it('deve alternar o status de completed de false para true', () => {
-        const task = createTask('Tarefa teste');
+        const task = createTask('Tarefa teste', 'low');
         const toggled = toggleTask(task);
 
         expect(toggled.completed).toBe(true);
     })
     
     it('deve alternar o status de completed de true para false', () => {
-        let task = createTask('Tarefa teste');
+        let task = createTask('Tarefa teste', 'low');
         task.completed = true;
         const toggled = toggleTask(task);
 
@@ -159,7 +160,7 @@ describe('toggleTask', () => {
     })
 
     it('deve manter o id e o title inalterados', () => {
-        const task = createTask('Tarefa teste');
+        const task = createTask('Tarefa teste', 'low');
         const toggled = toggleTask(task);
 
         expect(toggled.id).toBe(task.id);
@@ -167,7 +168,7 @@ describe('toggleTask', () => {
     })
 
     it('deve retornar um NOVO objeto (imutabilidade)', () => {
-        const task = createTask('Tarefa teste');
+        const task = createTask('Tarefa teste', 'low');
         const toggled = toggleTask(task);
 
         expect(toggled).not.toBe(task);
@@ -181,8 +182,8 @@ describe('removeTask', () => {
     })
 
     it('deve remover a tarefa pelo id', () => {
-        let tasks = addTask([], "Tarefa 01")
-        tasks = addTask(tasks, "Tarefa 02")
+        let tasks = addTask([], "Tarefa 01", 'low')
+        tasks = addTask(tasks, "Tarefa 02", 'low')
         const taskToRemove = tasks[0];
 
         const updatedTasks = removeTask(tasks, taskToRemove.id);
@@ -192,8 +193,8 @@ describe('removeTask', () => {
     })
 
     it('deve manter as outras tarefas inalteradas', () => {
-        let tasks = addTask([], "Tarefa 01")
-        tasks = addTask(tasks, "Tarefa 02")
+        let tasks = addTask([], "Tarefa 01", 'low')
+        tasks = addTask(tasks, "Tarefa 02", 'low')
         const taskToRemove = tasks[0];
 
         const updatedTasks = removeTask(tasks, taskToRemove.id);
@@ -202,7 +203,7 @@ describe('removeTask', () => {
     })
 
     it('deve retornar um NOVO array (imutabilidade)', () => {
-        let tasks = addTask([], "Tarefa 01")
+        let tasks = addTask([], "Tarefa 01", '')
         const taskToRemove = tasks[0];
 
         const updatedTasks = removeTask(tasks, taskToRemove.id);
@@ -211,8 +212,8 @@ describe('removeTask', () => {
     })
 
     it('id inexistente deve retornar o array original sem alterações', () => {
-        let tasks = addTask([], "Tarefa 01")
-        tasks = addTask(tasks, "Tarefa 02")
+        let tasks = addTask([], "Tarefa 01", '')
+        tasks = addTask(tasks, "Tarefa 02", '')
 
         const updatedTasks = removeTask(tasks, 67);
 
@@ -234,10 +235,10 @@ describe('filterTasks', () => {
 
     it('deve retornar só as tarefas completadas', () => {
 
-        let task1 = createTask('Tarefa 01');
-        let task2 = createTask('Tarefa 02');
-        let task3 = createTask('Tarefa 03');
-        let task4 = createTask('Tarefa 04');
+        let task1 = createTask('Tarefa 01', '');
+        let task2 = createTask('Tarefa 02', '');
+        let task3 = createTask('Tarefa 03', '');
+        let task4 = createTask('Tarefa 04', '');
 
         task2.completed = toggleTask(task2).completed;
         task4.completed = toggleTask(task4).completed;
@@ -257,10 +258,10 @@ describe('filterTasks', () => {
     });
 
     it('deve retornar todas as tarefas', () => {
-        let task1 = createTask('Tarefa 01');
-        let task2 = createTask('Tarefa 02');
-        let task3 = createTask('Tarefa 03');
-        let task4 = createTask('Tarefa 04');
+        let task1 = createTask('Tarefa 01', '');
+        let task2 = createTask('Tarefa 02', '');
+        let task3 = createTask('Tarefa 03', '');
+        let task4 = createTask('Tarefa 04', '');
 
         task3.completed = toggleTask(task3).completed;
 
@@ -276,10 +277,10 @@ describe('filterTasks', () => {
     })
 
     it('deve retornar todas as tarefas pendendtes', () => {
-        let task1 = createTask('Tarefa 01');
-        let task2 = createTask('Tarefa 02');
-        let task3 = createTask('Tarefa 03');
-        let task4 = createTask('Tarefa 04');
+        let task1 = createTask('Tarefa 01', '');
+        let task2 = createTask('Tarefa 02', '');
+        let task3 = createTask('Tarefa 03', '');
+        let task4 = createTask('Tarefa 04', '');
 
         task2.completed = toggleTask(task2).completed;
 
@@ -304,7 +305,7 @@ describe('filterTasks', () => {
     });
 
     it('deve retornar um novo array (imutabilidade)', () => {
-        let listaTaskOriginal = [createTask('Tarefa 01'), createTask('Tarefa 02')];
+        let listaTaskOriginal = [createTask('Tarefa 01', ''), createTask('Tarefa 02', '')];
         listaTaskOriginal[0].completed = true;
         listaTaskOriginal[1].completed = false;
 
@@ -325,9 +326,9 @@ describe('filterTasks', () => {
         });
 
         it('deve contar o número de tarefas completadas', () => {
-            let tasks = addTask([], 'Tarefa 01');
-            tasks = addTask(tasks, 'Tarefa 02');
-            tasks = addTask(tasks, 'Tarefa 03');
+            let tasks = addTask([], 'Tarefa 01', '');
+            tasks = addTask(tasks, 'Tarefa 02', '');
+            tasks = addTask(tasks, 'Tarefa 03', '');
 
             expect(countTasks(tasks)).toBe(3);
         });
@@ -337,9 +338,9 @@ describe('filterTasks', () => {
         let tasks = [];
         beforeEach(() => {
             resetId();
-                tasks = addTask([], 'Tarefa 01');
-                tasks = addTask(tasks, 'Tarefa 02');
-                tasks = addTask(tasks, 'Tarefa 03');
+                tasks = addTask([], 'Tarefa 01', '');
+                tasks = addTask(tasks, 'Tarefa 02', '');
+                tasks = addTask(tasks, 'Tarefa 03', '');
         })
 
         it('deve retornar 0 se não houver tarefas completadas', () => {
@@ -359,9 +360,9 @@ describe('filterTasks', () => {
         let tasks = [];
         beforeEach(() => {
             resetId();
-            tasks = addTask([], 'Tarefa 01');
-            tasks = addTask(tasks, 'Tarefa 02');
-            tasks = addTask(tasks, 'Tarefa 03');
+            tasks = addTask([], 'Tarefa 01', '');
+            tasks = addTask(tasks, 'Tarefa 02', '');
+            tasks = addTask(tasks, 'Tarefa 03', '');
 
             tasks = tasks.map(task => (task.id === 1 ? toggleTask(task) : task));
         })
@@ -399,7 +400,7 @@ describe('filterTasks', () => {
         });
 
         it('deve retornar false se não for nenhuma das opções válidas', () => {
-            const invalidValues = ['urgent', 'critical', '', null, undefined, 123, true, [], {}];
+            const invalidValues = ['urgent', 'critical', undefined, 123, true, [], {}];
 
             invalidValues.forEach(value => {
                 if(invalidValues != validPriorities){

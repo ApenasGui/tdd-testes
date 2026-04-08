@@ -13,22 +13,41 @@ export function validateTitle(title){
     return titleTrimmed.length >= 3;
 }
 
+export function validatePriority(priority){
+    if(priority === 'low'){
+        return true;
+    }
+    if(priority === 'high'){
+        return true;
+    }
+    if(priority === 'medium'){
+        return true;
+    }
+    if(priority === '' || priority === null){
+        priority = 'medium';
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
 export function createTask(title, priority){
-    if(validatePriority(priority)){}
     return {
         id: _nextId++,
         title: title.trim(),
         completed: false,
-        priority: priority
-    };
+        priority: priority.trim()
+    }
+    
 }
 
-export function addTask(tasks, title){
+export function addTask(tasks, title, priority){
     if(!validateTitle(title)){
         throw new Error("Título inválido")
     }
 
-    const newTask = createTask(title);
+    const newTask = createTask(title, priority);
     return[...tasks, newTask];
 }
 
@@ -67,19 +86,4 @@ export function countCompletedTasks(tasks = []){
 
 export function countPendingTasks(tasks = []){
     return tasks.filter(task => task.completed === false).length;
-}
-
-export function validatePriority(priority){
-    if(priority === 'low'){
-        return true;
-    }
-    if(priority === 'high'){
-        return true;
-    }
-    if(priority === 'medium'){
-        return true;
-    }
-    else {
-        return false;
-    }
 }
