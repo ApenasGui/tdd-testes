@@ -456,4 +456,43 @@ describe('filterTasks', () => {
             }
         })
     });
+
+    describe('sortTasks', () => {
+        let tasks = [];
+        beforeEach(() => {
+            resetId();
+            tasks = addTask([], 'Tarefa 01', 'default');
+            tasks = addTask(tasks, 'Tarefa 02', 'pending');
+            tasks = addTask(tasks, 'Tarefa 03', 'completed');
+        })
+
+        it('deve ordenar tarefas por pendente, completada e default', () => {
+            const sortedTasks = sortTasks(tasks);
+            expect(sortedTasks[0].priority).toBe('pending');
+            expect(sortedTasks[1].priority).toBe('completed');
+            expect(sortedTasks[2].priority).toBe('default');
+        });
+
+        it('deve retornar um novo array (imutabilidade)', () => {
+            const sortedTasks = sortTasks(tasks);
+            expect(sortedTasks).not.toBe(tasks);
+        });
+
+        it('lista vazia deve retornar um array vazio', () => {
+            const sortedTasks = sortTasks([]);
+            expect(sortedTasks).toEqual([]);
+        });
+
+        it('lista só com pendentes deve manter a ordem', () => {
+            const pendingTasks = tasks.filter(task => task.priority === 'pending');
+            const sortedTasks = sortTasks(pendingTasks);
+            expect(sortedTasks).toEqual(pendingTasks);
+        });
+
+        it('lista só com conpletadas deve manter a ordem', () => {
+            const completedTasks = tasks.filter(task => task.priority === 'completed');
+            const sortedTasks = sortTasks(completedTasks);
+            expect(sortedTasks).toEqual(completedTasks);
+        });
+    })
 })
