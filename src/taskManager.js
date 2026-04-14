@@ -82,8 +82,16 @@ export function countTasks(tasks = []){
 
 export function countCompletedTasks(tasks = []){
     return tasks.filter(task => task.completed === true).length;
-}
+};
 
 export function countPendingTasks(tasks = []){
     return tasks.filter(task => task.completed === false).length;
-}
+};
+
+export function isDuplicate(title01, title02){
+    if(title01.trim().toLowerCase() === title02.trim().toLowerCase()){
+        return true;
+    } else {
+        return false;
+    }
+};
