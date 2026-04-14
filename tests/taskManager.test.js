@@ -11,6 +11,7 @@ import {
     countCompletedTasks,
     countPendingTasks,
     validatePriority,
+    isDuplicate
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {
@@ -442,16 +443,16 @@ describe('filterTasks', () => {
         });
 
         it('deve true para títulos para titulos com case sensitive', () => {
-            const title1 = tasks[0].title.trim().toLowerCase(); // "Tarefa 01 em lower case"
-            const title2 = tasks[2].title.trim().toLowerCase(); // "tarefa 01 em lower case"
+            const title1 = tasks[0].title; // "Tarefa 01 em lower case"
+            const title2 = tasks[2].title; // "tarefa 01 em lower case"
             expect(isDuplicate(title1, title2)).toBe(true);
         });
 
         it('deve retornar erro caso a mesma tarefa adicionada tenha o mesmo nome de uma tarefa existente', () => {
             const newTaskTitle = 'Tarefa 01';
-            const existingTaskTitle = tasks[0].title.trim().toLowerCase();
+            const existingTaskTitle = tasks[0].title;
             if(isDuplicate(newTaskTitle, existingTaskTitle)){
-                expect(() => addTask(tasks, newTaskTitle.trim().toLowerCase(), '')).toThrow('Título duplicado');
+                expect(() => addTask(newTaskTitle, newTaskTitle, '')).toThrow('Título duplicado');
             }
         })
     });
