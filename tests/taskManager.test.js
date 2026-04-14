@@ -408,7 +408,51 @@ describe('filterTasks', () => {
                 }
             });
         });
-
-
     });
-});
+
+    describe('isDuplicate', () => {
+        let tasks = [];
+        beforeEach(() => {
+            resetId();
+            tasks = addTask([], 'Tarefa 01', '');
+            tasks = addTask(tasks, 'Tarefa 02', '');
+            tasks = addTask(tasks, 'tarefa 01', '');
+        })
+
+        it('deve retornar true para título duplicado', () => {
+            const titles = tasks.map(task => task.title);
+            for(let i = 0; i < titles.length; i++){
+                for(let j = i + 1; j < titles.length; j++){
+                    if(isDuplicate(titles[i], titles[j])){
+                        expect(true).toBe(true);
+                    }
+                }
+            }
+        });
+
+        it('deve retornar false para títulos únicos', () => {
+            const titles = tasks.map(task => task.title);
+            for(let i = 0; i < titles.length; i++){
+                for(let j = i + 1; j < titles.length; j++){
+                    if(!isDuplicate(titles[i], titles[j])){
+                        expect(false).toBe(false);
+                    }
+                }
+            }
+        });
+
+        it('deve true para títulos para titulos com case sensitive', () => {
+            const title1 = tasks[0].title.trim().toLowerCase(); // "Tarefa 01 em lower case"
+            const title2 = tasks[2].title.trim().toLowerCase(); // "tarefa 01 em lower case"
+            expect(isDuplicate(title1, title2)).toBe(true);
+        });
+
+        it('deve retornar erro caso a mesma tarefa adicionada tenha o mesmo nome de uma tarefa existente', () => {
+            const newTaskTitle = 'Tarefa 01';
+            const existingTaskTitle = tasks[0].title.trim().toLowerCase();
+            if(isDuplicate(newTaskTitle, existingTaskTitle)){
+                expect(() => addTask(tasks, newTaskTitle.trim().toLowerCase(), '')).toThrow('Título duplicado');
+            }
+        })
+    });
+})
