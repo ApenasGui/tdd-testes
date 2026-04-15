@@ -12,7 +12,8 @@ import {
     countPendingTasks,
     validatePriority,
     isDuplicate,
-    sortTask
+    sortTask,
+    searchTasks
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {
@@ -498,5 +499,36 @@ describe('filterTasks', () => {
             const sortedTasks = sortTask(completedTasks);
             expect(sortedTasks).toEqual(completedTasks);
         });
+    })
+
+    describe('searchTasks', () => {
+        let tasks = [];
+        beforeEach(() => {
+            resetId();
+            tasks = addTask([], 'Estudar Backend', 'default')
+            tasks = addTask(tasks, 'Estudar DevOps', 'completed')
+            tasks = addTask(tasks, 'Aula DevOps e Desenvolvimento Backend', 'pending')
+        })
+
+        it('deve retornar a prmeira tarefa e terceira'){
+            expect(searchTasks(tasks, 'Backend')).toEqual([tasks[0], tasks[2]]);
+        }
+
+        it('deve retornar a seguda e terceira tarefa, texto procurado: devops'){
+            expect(searchTasks(tasks, 'DevOps')).toEqual([tasks[1], tasks[2]]);
+        }
+
+        it('deve funcionar com case sensitive'){
+            expect(searchTasks(tasks, 'backend')).toEqual([tasks[0]]);
+            expect(searchTasks(tasks, 'ESTUDAR')).toEqual([tasks[1]]);
+        }
+
+        it('caso lista vazia, deve retornar lista vazia'){
+            expect(searchTasks([], 'Backend')).toEqual([]);
+        }
+
+        it('caso texto no parametro for vazio, deve retornar todas as tarefas'){
+            expect(searchTasks(tasks, '')).toEqual(tasks);
+        }
     })
 })
