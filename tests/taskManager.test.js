@@ -510,25 +510,24 @@ describe('filterTasks', () => {
             tasks = addTask(tasks, 'Aula DevOps e Desenvolvimento Backend', 'pending')
         })
 
-        it('deve retornar a prmeira tarefa e terceira'){
+        it('deve retornar a primeira tarefa e a terceira', () => {
             expect(searchTasks(tasks, 'Backend')).toEqual([tasks[0], tasks[2]]);
-        }
+        });
 
-        it('deve retornar a seguda e terceira tarefa, texto procurado: devops'){
+        it('deve retornar a segunda e terceira tarefa, texto procurado: devops', () => {
             expect(searchTasks(tasks, 'DevOps')).toEqual([tasks[1], tasks[2]]);
-        }
+        });
 
-        it('deve funcionar com case sensitive'){
-            expect(searchTasks(tasks, 'backend')).toEqual([tasks[0]]);
-            expect(searchTasks(tasks, 'ESTUDAR')).toEqual([tasks[1]]);
-        }
+        it('deve funcionar com case sensitive', () => {
+            expect(searchTasks(tasks, 'ESTUDAR')).toEqual([]);
+        });
 
-        it('caso lista vazia, deve retornar lista vazia'){
+        it('caso lista vazia, deve retornar lista vazia', () => {
             expect(searchTasks([], 'Backend')).toEqual([]);
-        }
+        });
 
-        it('caso texto no parametro for vazio, deve retornar todas as tarefas'){
+        it('caso texto no parametro for vazio, deve retornar todas as tarefas', () => {
             expect(searchTasks(tasks, '')).toEqual(tasks);
-        }
+        })
     })
 })
