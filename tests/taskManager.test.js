@@ -11,7 +11,8 @@ import {
     countCompletedTasks,
     countPendingTasks,
     validatePriority,
-    isDuplicate
+    isDuplicate,
+    sortTask
 } from "../src/taskManager.js";
 
 describe('validateTitle', () => {
@@ -457,41 +458,44 @@ describe('filterTasks', () => {
         })
     });
 
-    describe('sortTasks', () => {
+    describe('sortTask', () => {
         let tasks = [];
         beforeEach(() => {
             resetId();
-            tasks = addTask([], 'Tarefa 01', 'default');
-            tasks = addTask(tasks, 'Tarefa 02', 'pending');
-            tasks = addTask(tasks, 'Tarefa 03', 'completed');
+            tasks = addTask([], 'Tarefa 01', 'default')
+            tasks = addTask(tasks, 'Tarefa 02', 'completed')
+            tasks = addTask(tasks, 'Tarefa 03', 'pending')
         })
 
         it('deve ordenar tarefas por pendente, completada e default', () => {
-            const sortedTasks = sortTasks(tasks);
+            const sortedTasks = sortTask(tasks);
+            
+            console.log(sortedTasks)
+
             expect(sortedTasks[0].priority).toBe('pending');
             expect(sortedTasks[1].priority).toBe('completed');
             expect(sortedTasks[2].priority).toBe('default');
         });
 
         it('deve retornar um novo array (imutabilidade)', () => {
-            const sortedTasks = sortTasks(tasks);
+            const sortedTasks = sortTask(tasks);
             expect(sortedTasks).not.toBe(tasks);
         });
 
         it('lista vazia deve retornar um array vazio', () => {
-            const sortedTasks = sortTasks([]);
+            const sortedTasks = sortTask([]);
             expect(sortedTasks).toEqual([]);
         });
 
         it('lista só com pendentes deve manter a ordem', () => {
             const pendingTasks = tasks.filter(task => task.priority === 'pending');
-            const sortedTasks = sortTasks(pendingTasks);
+            const sortedTasks = sortTask(pendingTasks);
             expect(sortedTasks).toEqual(pendingTasks);
         });
 
-        it('lista só com conpletadas deve manter a ordem', () => {
+        it('lista só com completadas deve manter a ordem', () => {
             const completedTasks = tasks.filter(task => task.priority === 'completed');
-            const sortedTasks = sortTasks(completedTasks);
+            const sortedTasks = sortTask(completedTasks);
             expect(sortedTasks).toEqual(completedTasks);
         });
     })
