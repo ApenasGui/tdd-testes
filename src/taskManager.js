@@ -1,5 +1,11 @@
 let _nextId = 1;
 
+const STATUS_ORDER = {
+  pending:   0,
+  completed: 1,
+  default:   2,
+};
+
 export function resetId(){
     _nextId = 1;
 }
@@ -89,9 +95,19 @@ export function countPendingTasks(tasks = []){
 };
 
 export function isDuplicate(title01, title02){
+
     if(title01.trim().toLowerCase() === title02.trim().toLowerCase()){
         return true;
     } else {
         return false;
     }
 };
+
+export function sortTask(tasks){
+
+    return [...tasks].sort((a, b) => {
+    const orderA = STATUS_ORDER[a.priority] ?? 2;
+    const orderB = STATUS_ORDER[b.priority] ?? 2;
+    return orderA - orderB;
+  });
+}
