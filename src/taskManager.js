@@ -111,3 +111,14 @@ export function sortTask(tasks){
     return orderA - orderB;
   });
 }
+
+export function searchTasks(tasks, text) {
+
+    if(text === '' || text === null){
+    return tasks;
+  }
+  if(tasks === undefined || tasks.length === 0){
+    return [];
+  }
+  return tasks.filter(t => t.title.includes(text));
+}
